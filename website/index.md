@@ -4,22 +4,10 @@ title: Home
 landing: true
 children:
 - learnmore/
-- { path: download/, menu: null }
-- { path: /guide/start/index.md, title_in_menu: Get Started, href_path: /guide/start/index.md}
 - path: documentation/
   menu:
   - { path: /guide/index.md, title_in_menu: "User Guide", 
       menu_customization: { dropdown_section_header: true } }
-  - { path: /guide/yaml/index.md, title_in_menu: YAML Blueprints, href_path: /guide/yaml/creating-yaml.md }
-  - { path: /guide/java/index.md, title_in_menu: Java Blueprints }
-  - { path: /guide/ops/index.md, title_in_menu: Operations,
-      menu_customization: { dropdown_section_header: true } }
-  - { path: /guide/dev/index.md, title_in_menu: Developer Guide }
-  - { path: meta/versions.md, title_in_menu: Versions,
-      menu_customization: { dropdown_new_section: true } }
-  - { path: documentation/other-docs.md, title_in_menu: Other Resources }
-- community/
-- developers/
 ---
 
 <div class="jumbotron">

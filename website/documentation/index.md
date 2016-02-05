@@ -3,8 +3,6 @@ layout: website-normal
 title: Documentation
 children:
 - /guide/
-- /guide/dev/
-- ../meta/versions.md
 - other-docs.md
 ---
 
