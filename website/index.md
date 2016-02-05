@@ -63,3 +63,15 @@ View and modify using the *web console* or automate using the *REST API*
 </div>
 
 </div><!-- jumbotron -->
+
+
+
+{% for product in site.pages %} {% capture length %}{{ forloop.length }}{% endcapture %} {% endfor %}
+
+PAGES = {{ length }}
+
+{% for node in site.pages  %}
+* {{ node.dir }}: {{ node.title }} 
+{% endfor %}
+
+
