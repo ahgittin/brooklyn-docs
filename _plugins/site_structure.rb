@@ -115,7 +115,7 @@ module SiteStructure
       
       # Pathname API ignores first arg below if second is absolute
 #      puts "converting #{path} wrt #{referrent ? referrent.path : ""}"
-      file = Pathname.new(File.dirname(referrent ? referrent.path : "")) + path
+      file = Pathname.new(File.dirname(referrent ? referrent.path : "" + path))
 
       if file.to_s.end_with? "/"
         if File.exist? File.join(file, 'index.md')
