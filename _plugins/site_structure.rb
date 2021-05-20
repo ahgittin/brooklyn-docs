@@ -60,7 +60,7 @@
 #
 module SiteStructure
 
-  DEBUG = false
+  DEBUG = true
 
   require 'yaml'  
 #  require 'pp'
@@ -108,13 +108,13 @@ module SiteStructure
   
   class Generator < Jekyll::Generator
 
-    @@verbose = false;
+    @@verbose = true;
     
     def self.find_page_with_path_absolute_or_relative_to(site, path, referrent, structure_processed_pages)
       uncleaned_path = path
       
       # Pathname API ignores first arg below if second is absolute
-#      puts "converting #{path} wrt #{referrent ? referrent.path : ""}"
+      puts "converting #{path} wrt #{referrent ? referrent.path : ""}" if @@verbose
       file = Pathname.new(File.dirname(referrent ? referrent.path : "")) + path
 
       if file.to_s.end_with? "/"
@@ -186,10 +186,14 @@ module SiteStructure
     end
 
     # processes liquid tags, e.g. in a link or path object
-    def self.render_liquid_with_page(site, page, content)
+    def self.render_liquid_with_page(site, page, content, path=nil)
       return content unless page
+      if (!path)
+        # path must be unique to the content ... ideally use a hash, but for now just:
+        path = "random-#{rand(1000000)}"
+      end
       info = { :filters => [Jekyll::Filters], :registers => { :site => site, :page => page } }
-      page.render_liquid(content, site.site_payload, info, nil)
+      page.render_liquid(content, site.site_payload, info, path)
     end
     
     def self.gen_structure(site, item, parent, breadcrumb_pages_in, breadcrumb_paths_in, structure_processed_pages)
@@ -199,7 +203,8 @@ module SiteStructure
       if (item.is_a? String)
         item = { 'path' => item }
       end
-      if (item['path'])      
+      if (item['path'])
+        puts "looking for #{item['path']} under parent #{parent ? parent.path : 'root'}" if @@verbose
         page = find_page_with_path_absolute_or_relative_to(site, render_liquid_with_page(site, parent, item['path']), parent, structure_processed_pages)
         # if nil and find_page doesn't raise, we are in debug mode, silently ignore
         return nil unless page
@@ -251,6 +256,7 @@ module SiteStructure
         
         data['path'] = page.path
         if item['href_path']
+          puts "finding from href #{item['href_path']}" if @@verbose
           href_page = find_page_with_path_absolute_or_relative_to(site, render_liquid_with_page(site, page, item['href_path']), parent, structure_processed_pages)
         else
           href_page = page
@@ -314,6 +320,7 @@ module SiteStructure
       if data['breadcrumbs']
         # if custom breadcrumbs set on page, use them instead
         breadcrumb_pages = data['breadcrumb_pages'] = data['breadcrumbs'].collect { |path|
+          puts "finding from breadcrumb #{path}" if @@verbose
           result = find_page_with_path_absolute_or_relative_to(site, render_liquid_with_page(site, parent, path), page, structure_processed_pages)
           raise "missing breadcrumb #{path} in #{page.path}" unless result
           result
@@ -324,6 +331,7 @@ module SiteStructure
       if data['menu_parent'] 
         if data['menu_parent'].is_a? String
           # if custom menu_parent was set as a string then load it
+          puts "finding from menu #{data['menu_parent']}" if @@verbose
           parent_result = find_page_with_path_absolute_or_relative_to(site, render_liquid_with_page(site, parent, data['menu_parent']), page, structure_processed_pages)        
           raise "missing parent #{data['menu_parent']} in #{page['path']}" unless parent_result
           data['menu_parent'] = parent_result
@@ -348,6 +356,7 @@ module SiteStructure
               sub['menu'] = child['menu']
               if (sub['menu'] != nil)
                 if sub['menu'].is_a? String
+                  puts "yaml child paths either #{data['path']} or #{page.path}" if @@verbose
                   sub['menu'] = YAML.load(render_liquid_with_page(site, page, sub['menu'])) if sub['menu'].is_a? String
                 end
                 sub['menu'] = sub['menu'].collect { |mi| 
