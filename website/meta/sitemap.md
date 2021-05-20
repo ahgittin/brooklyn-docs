@@ -18,7 +18,7 @@ title: Site Map
 <ul>
 {% for item in site.data.menu %}
   {% push site_items item %}
-  {% include sitemap-item.html %}
+  include sitemap-item.html TODO-this-should-be-run
 {% endfor %}
 </ul>
 
