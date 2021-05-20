@@ -18,14 +18,14 @@ availablePages: []
 		{% assign visited = "" | split: "|" %}
 		{% for node in site.data.menu  %}
 			{% push site_items node %}
-			include singlepage-item.html TODO
+			{% include singlepage-item.html %}
 		{% endfor %}
     </ul></nav>
 
 	{% assign visitedb = "" | split: "|" %}
 	{% for node in site.data.menu  %}
 		{% push site_items node %}
-		include singlepage-content.html TODO
+		{% include singlepage-content.html %}
     {% endfor %}
   
 </div>
