@@ -60,7 +60,7 @@
 #
 module SiteStructure
 
-  DEBUG = true
+  DEBUG = false
 
   require 'yaml'  
 #  require 'pp'
@@ -108,7 +108,7 @@ module SiteStructure
   
   class Generator < Jekyll::Generator
 
-    @@verbose = true;
+    @@verbose = false;
     
     def self.find_page_with_path_absolute_or_relative_to(site, path, referrent, structure_processed_pages)
       uncleaned_path = path
