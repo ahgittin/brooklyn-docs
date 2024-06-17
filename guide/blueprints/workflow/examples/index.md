@@ -6,6 +6,7 @@ children:
 - ansible-bash/
 - git-latest/
 - oauth/
+- currency/
 ---
 
 The following examples are available:
